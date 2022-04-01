@@ -4,14 +4,44 @@ import { AntDesign as AntdIcon } from "@expo/vector-icons";
 
 import { colors } from "../../config/colors";
 import { Spacer } from "../atoms/Spacer";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 
 interface HeaderProps {
   title?: string;
 }
 
 export function Header({ title }: HeaderProps) {
+  const navigation = useNavigation()
+
+  const { type, routes } = useNavigationState(state => state)
+
+  const hasGoBackButton = type === 'stack' && routes.length > 1
+
   return (
-    <HStack p={4} alignItems={"center"}>
+    <HStack p={4} alignItems={"center"} mb={2}>
+      {hasGoBackButton && (
+        <IconButton
+          rounded={"full"}
+          _icon={{
+            as: AntdIcon,
+            name: "left",
+            size: 6,
+            color: "dark.500",
+          }}
+          _pressed={{
+            backgroundColor: "brand.500",
+            _icon: {
+              color: "dark.50",
+            },
+          }}
+          onPress={() => navigation.goBack()}
+        />
+      )}
+
+      {hasGoBackButton && title && (
+        <Spacer x={4} />
+      )}
+
       {title && <Heading color={"dark.500"}>{title}</Heading>}
 
       <IconButton
