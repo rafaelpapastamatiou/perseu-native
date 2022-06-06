@@ -11,6 +11,7 @@ export const AuthNavigator = () => {
         headerShown: false,
       }}
       initialRouteName="SignIn"
-    ></Auth.Navigator>
+    >
+    </Auth.Navigator>
   );
 };

@@ -1,44 +1,46 @@
 import React from "react";
 import {
   Button,
-  FormControl,
-  Input,
   ScrollView,
   VStack
 } from "native-base";
+import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
 
 import { Spacer } from "../../../components/atoms/Spacer";
 import { Header } from "../../../components/organisms/Header";
 import { Content } from "../../../components/atoms/Content";
 import { useAddTransaction } from "../hooks/useAddTransaction";
+import { FormInput } from "../../../components/organisms/HookForm/FormInput";
+import { FormSelect } from "../../../components/organisms/HookForm/FormSelect";
+import { FormDatePicker } from "../../../components/organisms/HookForm/FormDatePicker";
 
 interface AddTransactionFormData {
-  assetTypeId: string;
-  brokerId: string;
-  assetId: string;
-  walletId: string;
+  type: string;
+  exchange: string;
+  symbol: string;
   unitValue: number;
   quantity: number;
   date?: Date;
-  tax?: number;
 }
 
 export function AddTransaction() {
   const addTransaction = useAddTransaction()
 
-  async function onSubmit() {
+  const formMethods = useForm<AddTransactionFormData>()
+
+  const { handleSubmit } = formMethods
+
+  const onSubmit: SubmitHandler<AddTransactionFormData> = async (data) => {
     await addTransaction.mutateAsync({
-      assetId: "1",
-      assetTypeId: "1",
-      brokerId: "1",
-      quantity: 10,
-      unitValue: 25,
-      walletId: "1",
+      ...data,
+      date: new Date(),
+      quantity: Number(data.quantity),
+      unitValue: Number(data.unitValue),
     })
   }
 
   return (
-    <>
+    <FormProvider {...formMethods}>
       <Header
         title="Nova transação"
       />
@@ -46,63 +48,83 @@ export function AddTransaction() {
       <ScrollView>
         <Content>
           <VStack>
-            <FormControl>
-              <FormControl.Label>Categoria</FormControl.Label>
-              <Input bgColor={"dark.50"} size={"2xl"} />
-            </FormControl>
+            {/* <FormSelect
+              label="Categoria"
+              name="type"
+              options={[
+                { label: "Ação", value: "STOCK" },
+                { label: "Fundo Imobiliário", value: "FII" },
+                { label: "Stock", value: "STOCK" },
+                { label: "REIT", value: "REIT" },
+              ]}
+              required
+            />
+
+            <Spacer y={4} /> */}
+
+            <FormSelect
+              label="Tipo da transação"
+              name="type"
+              options={[
+                { label: "Compra", value: "purchase" },
+                { label: "Venda", value: "sale" },
+              ]}
+              required
+            />
 
             <Spacer y={4} />
 
-            <FormControl>
-              <FormControl.Label>Corretora</FormControl.Label>
-              <Input bgColor={"dark.50"} size={"2xl"} />
-            </FormControl>
+            <FormInput
+              label="Corretora"
+              required
+              name="exchange"
+            />
 
             <Spacer y={4} />
 
-            <FormControl>
-              <FormControl.Label>Ativo</FormControl.Label>
-              <Input bgColor={"dark.50"} size={"2xl"} />
-            </FormControl>
+            <FormInput
+              label="Ativo"
+              required
+              name="symbol"
+            />
 
             <Spacer y={4} />
 
-            <FormControl>
-              <FormControl.Label>Carteira</FormControl.Label>
-              <Input bgColor={"dark.50"} size={"2xl"} />
-            </FormControl>
+            <FormInput
+              label="Valor unitário"
+              required
+              name="unitValue"
+              keyboardType="numeric"
+            />
 
             <Spacer y={4} />
 
-            <FormControl>
-              <FormControl.Label>Valor unitário</FormControl.Label>
-              <Input bgColor={"dark.50"} size={"2xl"} />
-            </FormControl>
+            <FormInput
+              label="Quantidade"
+              required
+              name="quantity"
+              keyboardType="number-pad"
+            />
 
             <Spacer y={4} />
 
-            <FormControl>
-              <FormControl.Label>Quantidade</FormControl.Label>
-              <Input bgColor={"dark.50"} size={"2xl"} />
-            </FormControl>
-
-            <Spacer y={4} />
-
-            <FormControl>
+            {/* <FormControl>
               <FormControl.Label>Valor das taxas</FormControl.Label>
               <Input bgColor={"dark.50"} size={"2xl"} />
-            </FormControl>
+            </FormControl> */}
 
-            <Spacer y={4} />
+            {/* <Spacer y={4} />
 
-            <FormControl>
-              <FormControl.Label>Data</FormControl.Label>
-              <Input bgColor={"dark.50"} size={"2xl"} />
-            </FormControl>
+            <FormDatePicker
+              name="date"
+              label="Data"
+              required
+              defaultValue={new Date()}
+            /> */}
 
             <Spacer y={8} />
 
-            <Button size={'lg'} onPress={onSubmit}>
+            <Button size={'lg'} onPress={handleSubmit(onSubmit)}>
               ADICIONAR
             </Button>
 
@@ -111,7 +133,6 @@ export function AddTransaction() {
           </VStack>
         </Content>
       </ScrollView>
-    </>
-
+    </FormProvider>
   );
 }

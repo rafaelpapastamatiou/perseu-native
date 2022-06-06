@@ -13,7 +13,7 @@ import { Spacer } from "../../../components/atoms/Spacer";
 import { Header } from "../../../components/organisms/Header";
 import { AddTransactionButton } from "../components/molecules/AddTransactionButton";
 import { TransactionItem } from "../components/molecules/TransactionItem";
-import { useTransactions } from "../hooks/useTransactions";
+import { GetTransactionsResponse, useTransactions } from "../hooks/useTransactions";
 import { usePagination } from "../../../hooks/usePagination";
 import { TransactionsStackParamList } from "../transactions.navigator";
 
@@ -34,6 +34,10 @@ export function Transactions({}: TransactionsProps): JSX.Element {
     isLoading,
     isFetching
   } = useTransactions(currentPage, perPage);
+
+  const { transactions = [], totalCount = 0 } = (data || {}) as GetTransactionsResponse;
+
+  console.log('transactions', transactions)
 
   function handleNavigateToNewTransaction() {
     navigation.navigate("AddTransaction")
@@ -74,7 +78,7 @@ export function Transactions({}: TransactionsProps): JSX.Element {
         <Spacer y={8} />
 
         <FlatList
-          data={data ? data.transactions : []}
+          data={transactions}
           renderItem={({ item, index }) => (
             <>
               {index > 0 && <Spacer y={4} />}

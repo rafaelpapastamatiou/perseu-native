@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { api } from "../../../services/api";
 import { Transaction } from "../types";
 
-type GetTransactionsResponse = {
+export type GetTransactionsResponse = {
   totalCount: number;
   transactions: Transaction[];
 };
@@ -22,9 +22,7 @@ export async function getTransactions(
     }
   );
 
-  console.log(data)
-
-  const { transactions: transactionsData } = data as { transactions: Transaction[] }
+  const { transactions: transactionsData = [] } = data as { transactions: Transaction[] }
 
   const totalCount = Number(headers["x-total-count"]);
 

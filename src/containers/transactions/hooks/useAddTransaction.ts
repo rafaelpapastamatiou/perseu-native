@@ -3,14 +3,12 @@ import { api } from "../../../services/api";
 import { Transaction } from "../types";
 
 interface AddTransaction {
-  assetTypeId: string;
-  brokerId: string;
-  assetId: string;
-  walletId: string;
+  type: string;
+  exchange: string;
+  symbol: string;
   unitValue: number;
   quantity: number;
-  date?: Date;
-  tax?: number;
+  date: Date;
 }
 
 export function useAddTransaction() {
@@ -18,16 +16,24 @@ export function useAddTransaction() {
 
   return useMutation(
     async (transaction: AddTransaction) => {
-      const response = await api.post<Transaction>(
-        "transactions",
-        transaction
-      )
+      try {
+        const response = await api.post<Transaction>(
+          "transactions",
+          transaction
+        )
 
-      return response.data
+        return response.data
+      }
+      catch (err) {
+        console.log(err)
+      }
     },
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['transactions'])
+      },
+      onError: (err) => {
+        console.log(err)
       }
     }
   )

@@ -3,7 +3,7 @@ import { registerRootComponent } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
 import { NativeBaseProvider, StatusBar } from "native-base";
 
-import { makeServer } from "./services/mirage";
+// import { makeServer } from "./services/mirage";
 import { queryClient } from "./services/queryClient"
 
 import { navigatorTheme } from "./config/navigator-theme";
@@ -14,9 +14,9 @@ import { Navigator } from "./navigators";
 import { SafeContainer } from "./components/atoms/SafeContainer";
 import { QueryClientProvider } from "react-query";
 
-if (__DEV__) {
-  makeServer();
-}
+// if (__DEV__) {
+//   makeServer();
+// }
 
 export default function App() {
   return (

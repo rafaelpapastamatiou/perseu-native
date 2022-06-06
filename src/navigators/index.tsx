@@ -2,7 +2,7 @@ import React from "react";
 import { Center, Spinner } from "native-base";
 
 import { AppNavigator } from "./app.navigator";
-import { AuthNavigator } from "./auth.navigator";
+import { AuthNavigator } from "../containers/auth/auth.navigator";
 
 export function Navigator() {
   const user = {};
