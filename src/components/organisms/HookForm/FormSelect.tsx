@@ -63,7 +63,7 @@ export function FormSelect({
             {...rest}
           >
             {options.map((props, index) => (
-              <Select.Item key={index} {...props} />
+              <Select.Item key={props.value} {...props} />
             ))}
           </Select>
         )}

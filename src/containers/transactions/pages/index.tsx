@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Center,
   FlatList,
@@ -19,15 +19,12 @@ import { TransactionsStackParamList } from "../transactions.navigator";
 
 interface TransactionsProps {}
 
+const perPage = 15;
+
 export function Transactions({}: TransactionsProps): JSX.Element {
   const navigation = useNavigation<NavigationProp<TransactionsStackParamList>>()
 
-  const {
-    currentPage,
-    perPage,
-    handleNextPage,
-    handlePrevPage
-  } = usePagination();
+  const [currentPage, setCurrentPage] = useState(0)
 
   const {
     data,
@@ -35,9 +32,21 @@ export function Transactions({}: TransactionsProps): JSX.Element {
     isFetching
   } = useTransactions(currentPage, perPage);
 
-  const { transactions = [], totalCount = 0 } = (data || {}) as GetTransactionsResponse;
+  const { transactions = [], total = 0 } = (data || {}) as GetTransactionsResponse;
 
-  console.log('transactions', transactions)
+  const totalPages = total / perPage
+
+  function handleNextPage() {
+    if (currentPage + 1 >= totalPages) return
+
+    setCurrentPage(currentPage + 1)
+  }
+
+  function handlePrevPage() {
+    if (currentPage - 1 < 0) return
+
+    setCurrentPage(currentPage - 1)
+  }
 
   function handleNavigateToNewTransaction() {
     navigation.navigate("AddTransaction")
@@ -82,13 +91,19 @@ export function Transactions({}: TransactionsProps): JSX.Element {
           renderItem={({ item, index }) => (
             <>
               {index > 0 && <Spacer y={4} />}
+
               <TransactionItem
                 key={item.id}
                 quantity={item.quantity}
-                unitValue={item.unit_value}
+                unitValue={item.unitValue}
+                symbol={item.symbol}
+                type={item.type}
+                date={item.date}
+                exchange={item.exchange}
               />
             </>
           )}
+          keyExtractor={({ id }) => id}
           ListEmptyComponent={
             <>
               <Spacer y={4} />

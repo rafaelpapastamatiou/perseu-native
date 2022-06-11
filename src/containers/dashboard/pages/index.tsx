@@ -7,10 +7,47 @@ import { Card } from "../../../components/molecules/Card";
 import { Header } from "../../../components/organisms/Header";
 import { colors } from "../../../config/colors";
 import { AssetsChart } from "../components/molecules/AssetsChart";
-import { AssetsCompositionChart } from "../components/molecules/AssetsCompositionChart";
+import { WalletCompositionByTypeChart } from "../components/molecules/WalletCompositionByTypeChart";
 import { ProfitabilityChart } from "../components/molecules/ProfitabilityChart";
+import { useWalletCompositionByType } from "../hooks/useWalletCompositioByType";
+import { useWalletComposition } from "../hooks/useWalletComposition";
+import { WalletCompositionChart } from "../components/molecules/WalletCompositionChart";
+
+const colorsArray = [
+  colors.goldenYellow,
+  colors.phloxPurple,
+  colors.radicalRed,
+  colors.limeGreen,
+  colors.turquoiseBlue,
+  colors.silver
+]
 
 export function Dashboard() {
+  const {
+    data: composition = [],
+  } = useWalletComposition()
+
+  const {
+    data: compositionByType = [],
+  } = useWalletCompositionByType()
+
+  const compositionByTypeChartData = compositionByType.map(
+    ({ type, percentage }, i) => ({
+      key: type,
+      value: percentage,
+      label: type,
+      svg: {
+        fill: colorsArray[i]
+      },
+    })
+  )
+
+  const compositionChartData = composition.map(
+    ({ symbol, percentage }, i) => ({
+      label: symbol,
+      value: percentage,
+    })
+  )
   return (
     <>
       <Header title="Dashboard" />
@@ -47,31 +84,17 @@ export function Dashboard() {
 
           <Spacer y={4} />
 
+          <Card title="Composição por tipo de ativo">
+            <WalletCompositionByTypeChart
+              data={compositionByTypeChartData}
+            />
+          </Card>
+
+          <Spacer y={4} />
+
           <Card title="Composição">
-            <AssetsCompositionChart
-              data={[
-                {
-                  key: "Ações",
-                  value: 50,
-                  svg: {
-                    fill: colors.goldenYellow,
-                  },
-                },
-                {
-                  key: "FIIs",
-                  value: 30,
-                  svg: {
-                    fill: colors.radicalRed,
-                  },
-                },
-                {
-                  key: "Renda Fixa",
-                  value: 20,
-                  svg: {
-                    fill: colors.phloxPurple,
-                  },
-                },
-              ]}
+            <WalletCompositionChart
+              data={compositionChartData}
             />
           </Card>
         </Content>

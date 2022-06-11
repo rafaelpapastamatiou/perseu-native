@@ -1,10 +1,11 @@
 import { useQuery } from "react-query";
+import { PaginatedResult } from "../../../protocols/pagination";
 
 import { api } from "../../../services/api";
 import { Transaction } from "../types";
 
 export type GetTransactionsResponse = {
-  totalCount: number;
+  total: number;
   transactions: Transaction[];
 };
 
@@ -12,21 +13,21 @@ export async function getTransactions(
   page: number,
   per_page = 10,
 ): Promise<GetTransactionsResponse> {
-  const { data, headers } = await api.get(
+  const { data } = await api.get<PaginatedResult<Transaction>>(
     "/transactions",
     {
       params: {
         page,
-        per_page,
+        limit: per_page,
       },
     }
   );
 
-  const { transactions: transactionsData = [] } = data as { transactions: Transaction[] }
+  console.log({ data })
 
-  const totalCount = Number(headers["x-total-count"]);
+  const { data: transactionsData, total } = data
 
-  const transactions = transactionsData.map<Transaction>((transaction) => ({
+  const transactions = transactionsData.map((transaction) => ({
     ...transaction,
     createdAtFormatted: new Date(transaction.createdAt).toLocaleDateString(
       "pt-BR",
@@ -47,7 +48,7 @@ export async function getTransactions(
 
   return {
     transactions,
-    totalCount,
+    total,
   };
 }
 

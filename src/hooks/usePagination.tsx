@@ -13,9 +13,9 @@ interface UsePaginationReturn {
   handlePrevPage: () => void;
 }
 
-const defaultInitialPage = 10;
+const defaultInitialPage = 0;
 const defaultPerPage = 10;
-const defaultTotal = 10;
+const defaultTotal = 0;
 
 const defaultProps: UsePaginationProps = {
   initialPage: defaultInitialPage,
@@ -30,7 +30,7 @@ export function usePagination({
 }: UsePaginationProps = defaultProps): UsePaginationReturn {
   const [page, setPage] = useState(initialPage);
 
-  const totalPages = total / perPage;
+  const totalPages = total ? total / perPage : 0;
 
   function handleNextPage() {
     if (page + 1 > totalPages) return;
