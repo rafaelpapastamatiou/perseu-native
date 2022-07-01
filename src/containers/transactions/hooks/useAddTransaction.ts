@@ -33,6 +33,7 @@ export function useAddTransaction() {
         queryClient.invalidateQueries(['transactions'])
         queryClient.invalidateQueries(['walletComposition'])
         queryClient.invalidateQueries(['walletCompositionByType'])
+        queryClient.invalidateQueries(['walletEquity'])
       },
       onError: (err) => {
         console.log(err)

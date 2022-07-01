@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   ScrollView,
@@ -27,6 +27,8 @@ interface AddTransactionFormData {
 export function AddTransaction() {
   const navigation = useNavigation()
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const addTransaction = useAddTransaction()
 
   const formMethods = useForm<AddTransactionFormData>()
@@ -34,15 +36,23 @@ export function AddTransaction() {
   const { handleSubmit } = formMethods
 
   const onSubmit: SubmitHandler<AddTransactionFormData> = async (data) => {
-    await addTransaction.mutateAsync({
-      ...data,
-      date: new Date(),
-      quantity: Number(data.quantity),
-      unitValue: Number(data.unitValue),
-    })
 
-    if (navigation.canGoBack())
-      navigation.goBack()
+    try {
+      setIsSubmitting(true)
+
+      await addTransaction.mutateAsync({
+        ...data,
+        date: new Date(),
+        quantity: Number(data.quantity),
+        unitValue: Number(data.unitValue),
+      })
+
+      if (navigation.canGoBack())
+        navigation.goBack()
+    }
+    finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -68,17 +78,14 @@ export function AddTransaction() {
 
             <Spacer y={4} /> */}
 
-            <FormSelect
-              label="Tipo da transação"
-              name="type"
-              options={[
-                { label: "Compra", value: "purchase" },
-                { label: "Venda", value: "sale" },
-              ]}
+            <FormInput
+              label="Ativo"
               required
+              name="symbol"
             />
 
             <Spacer y={4} />
+
 
             <FormInput
               label="Corretora"
@@ -88,10 +95,14 @@ export function AddTransaction() {
 
             <Spacer y={4} />
 
-            <FormInput
-              label="Ativo"
+            <FormSelect
+              label="Tipo da transação"
+              name="type"
+              options={[
+                { label: "Compra", value: "purchase" },
+                { label: "Venda", value: "sale" },
+              ]}
               required
-              name="symbol"
             />
 
             <Spacer y={4} />
@@ -130,7 +141,11 @@ export function AddTransaction() {
 
             <Spacer y={8} />
 
-            <Button size={'lg'} onPress={handleSubmit(onSubmit)}>
+            <Button
+              size={'lg'}
+              onPress={handleSubmit(onSubmit)}
+              isLoading={isSubmitting}
+            >
               ADICIONAR
             </Button>
 
