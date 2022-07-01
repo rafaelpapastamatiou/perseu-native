@@ -1,9 +1,8 @@
 import React from 'react'
 import DateTimePicker, { DatePickerOptions } from '@react-native-community/datetimepicker';
 
-import { FormControl, WarningOutlineIcon } from 'native-base'
+import { FormControl, Text, WarningOutlineIcon, Text } from 'native-base'
 import { Controller, useFormContext } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message'
 
 import { useGetFieldError } from '../../../hooks/HookForm/useGetFieldError';
 
@@ -31,7 +30,7 @@ export function FormDatePicker({
 
   const { errors } = formState
 
-  const { hasError } = useGetFieldError({
+  const { error, hasError } = useGetFieldError({
     name,
     errors
   })
@@ -69,7 +68,7 @@ export function FormDatePicker({
         <FormControl.ErrorMessage
           leftIcon={<WarningOutlineIcon size="xs" />}
         >
-          <ErrorMessage name={name} />
+          <Text>{error.message}</Text>
         </FormControl.ErrorMessage>
       )}
     </FormControl>

@@ -1,7 +1,6 @@
 import React from 'react'
-import { FormControl, Input, IInputProps, WarningOutlineIcon } from 'native-base'
+import { FormControl, Input, IInputProps, WarningOutlineIcon, Text } from 'native-base'
 import { Controller, useFormContext } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message'
 
 import { useGetFieldError } from '../../../hooks/HookForm/useGetFieldError';
 
@@ -29,7 +28,7 @@ export function FormInput({
 
   const { errors } = formState
 
-  const { hasError } = useGetFieldError({
+  const { error, hasError } = useGetFieldError({
     name,
     errors
   })
@@ -69,7 +68,7 @@ export function FormInput({
         <FormControl.ErrorMessage
           leftIcon={<WarningOutlineIcon size="xs" />}
         >
-          <ErrorMessage name={name} />
+          <Text>{error.message}</Text>
         </FormControl.ErrorMessage>
       )}
     </FormControl>

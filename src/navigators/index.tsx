@@ -3,12 +3,12 @@ import { Center, Spinner } from "native-base";
 
 import { AppNavigator } from "./app.navigator";
 import { AuthNavigator } from "../containers/auth/auth.navigator";
+import { useAuth } from "../hooks/useAuth";
 
 export function Navigator() {
-  const user = {};
-  const isFetching = false;
+  const { isAuthenticated, isLoading } = useAuth()
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <Center flex={1}>
         <Spinner color="brand.500" />
@@ -16,5 +16,5 @@ export function Navigator() {
     );
   }
 
-  return user ? <AppNavigator /> : <AuthNavigator />;
+  return isAuthenticated ? <AppNavigator /> : <AuthNavigator />;
 }

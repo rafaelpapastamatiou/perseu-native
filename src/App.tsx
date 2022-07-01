@@ -13,6 +13,7 @@ import { Navigator } from "./navigators";
 
 import { SafeContainer } from "./components/atoms/SafeContainer";
 import { QueryClientProvider } from "react-query";
+import { AuthProvider } from "./contexts/auth";
 
 // if (__DEV__) {
 //   makeServer();
@@ -23,10 +24,12 @@ export default function App() {
     <NavigationContainer theme={navigatorTheme}>
       <QueryClientProvider client={queryClient}>
         <NativeBaseProvider theme={theme}>
-          <SafeContainer>
-            <StatusBar barStyle={"light-content"} />
-            <Navigator />
-          </SafeContainer>
+          <AuthProvider>
+            <SafeContainer>
+              <StatusBar barStyle={"light-content"} />
+              <Navigator />
+            </SafeContainer>
+          </AuthProvider>
         </NativeBaseProvider>
       </QueryClientProvider>
     </NavigationContainer>

@@ -4,10 +4,10 @@ import {
   ISelectProps,
   ISelectItemProps,
   WarningOutlineIcon,
-  Select
+  Select,
+  Text
 } from 'native-base'
 import { Controller, useFormContext } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message'
 
 import { useGetFieldError } from '../../../hooks/HookForm/useGetFieldError';
 
@@ -37,7 +37,7 @@ export function FormSelect({
 
   const { errors } = formState
 
-  const { hasError } = useGetFieldError({
+  const { error, hasError } = useGetFieldError({
     name,
     errors
   })
@@ -79,7 +79,7 @@ export function FormSelect({
         <FormControl.ErrorMessage
           leftIcon={<WarningOutlineIcon size="xs" />}
         >
-          <ErrorMessage name={name} />
+          <Text>{error.message}</Text>
         </FormControl.ErrorMessage>
       )}
     </FormControl>

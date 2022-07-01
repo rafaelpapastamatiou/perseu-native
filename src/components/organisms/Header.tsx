@@ -5,6 +5,7 @@ import { AntDesign as AntdIcon } from "@expo/vector-icons";
 import { colors } from "../../config/colors";
 import { Spacer } from "../atoms/Spacer";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { useAuth } from "../../hooks/useAuth";
 
 interface HeaderProps {
   title?: string;
@@ -12,6 +13,8 @@ interface HeaderProps {
 
 export function Header({ title }: HeaderProps) {
   const navigation = useNavigation()
+
+  const { signOut } = useAuth()
 
   const { type, routes } = useNavigationState(state => state)
 
@@ -49,7 +52,7 @@ export function Header({ title }: HeaderProps) {
         ml="auto"
         _icon={{
           as: AntdIcon,
-          name: "bells",
+          name: "logout",
           size: 6,
           color: "dark.500",
         }}
@@ -59,6 +62,7 @@ export function Header({ title }: HeaderProps) {
             color: "dark.50",
           },
         }}
+        onPress={signOut}
       />
 
       <Spacer x={4} />
