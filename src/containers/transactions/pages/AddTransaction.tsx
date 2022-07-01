@@ -13,6 +13,7 @@ import { useAddTransaction } from "../hooks/useAddTransaction";
 import { FormInput } from "../../../components/organisms/HookForm/FormInput";
 import { FormSelect } from "../../../components/organisms/HookForm/FormSelect";
 import { FormDatePicker } from "../../../components/organisms/HookForm/FormDatePicker";
+import { useNavigation } from "@react-navigation/native";
 
 interface AddTransactionFormData {
   type: string;
@@ -24,6 +25,8 @@ interface AddTransactionFormData {
 }
 
 export function AddTransaction() {
+  const navigation = useNavigation()
+
   const addTransaction = useAddTransaction()
 
   const formMethods = useForm<AddTransactionFormData>()
@@ -37,6 +40,9 @@ export function AddTransaction() {
       quantity: Number(data.quantity),
       unitValue: Number(data.unitValue),
     })
+
+    if (navigation.canGoBack())
+      navigation.goBack()
   }
 
   return (

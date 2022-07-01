@@ -59,35 +59,6 @@ export function Transactions({}: TransactionsProps): JSX.Element {
       <Header title="Transações" />
 
       <Content>
-        <Center alignItems="flex-end">
-          <AddTransactionButton
-            onPress={handleNavigateToNewTransaction}
-          />
-        </Center>
-
-        <Spacer y={4} />
-
-        <FormControl>
-          <FormControl.Label>Ativo</FormControl.Label>
-          <Input size="2xl" shadow="4" />
-        </FormControl>
-
-        <Spacer y={4} />
-
-        <FormControl>
-          <FormControl.Label>Corretora</FormControl.Label>
-          <Input size="2xl" shadow="4" />
-        </FormControl>
-
-        <Spacer y={4} />
-
-        <FormControl>
-          <FormControl.Label>Carteira</FormControl.Label>
-          <Input size="2xl" shadow="4" />
-        </FormControl>
-
-        <Spacer y={8} />
-
         {isLoading && <Spinner />}
 
         <FlatList
@@ -118,6 +89,14 @@ export function Transactions({}: TransactionsProps): JSX.Element {
             </>
           }
         />
+
+        <Spacer y={4} />
+
+        <AddTransactionButton
+          onPress={handleNavigateToNewTransaction}
+        />
+
+        <Spacer y={4} />
       </Content>
     </>
   );
