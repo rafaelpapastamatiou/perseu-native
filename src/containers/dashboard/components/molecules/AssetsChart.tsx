@@ -15,7 +15,7 @@ export function AssetsChart({ data }: AssetsChartProps) {
     <Path
       key={"line"}
       d={line}
-      stroke={colors.goldenYellow}
+      stroke={colors.turquoiseBlue}
       strokeWidth={2}
       fill={"none"}
     />
@@ -34,7 +34,7 @@ export function AssetsChart({ data }: AssetsChartProps) {
         contentInset={{ bottom: 20, top: 20 }}
         curve={shape.curveNatural}
         svg={{
-          fill: colors.goldenYellow,
+          fill: colors.turquoiseBlue,
           fillOpacity: 0.5,
         }}
       >

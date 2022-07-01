@@ -4,9 +4,11 @@ import {
   FlatList,
   FormControl,
   Input,
-  Text
+  Text,
+  Spinner
 } from "native-base";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { View } from "react-native";
 
 import { Content } from "../../../components/atoms/Content";
 import { Spacer } from "../../../components/atoms/Spacer";
@@ -19,7 +21,7 @@ import { TransactionsStackParamList } from "../transactions.navigator";
 
 interface TransactionsProps {}
 
-const perPage = 15;
+const perPage = 100;
 
 export function Transactions({}: TransactionsProps): JSX.Element {
   const navigation = useNavigation<NavigationProp<TransactionsStackParamList>>()
@@ -86,14 +88,16 @@ export function Transactions({}: TransactionsProps): JSX.Element {
 
         <Spacer y={8} />
 
+        {isLoading && <Spinner />}
+
         <FlatList
           data={transactions}
+          keyExtractor={({ id }) => id}
           renderItem={({ item, index }) => (
-            <>
+            <View key={item.id}>
               {index > 0 && <Spacer y={4} />}
 
               <TransactionItem
-                key={item.id}
                 quantity={item.quantity}
                 unitValue={item.unitValue}
                 symbol={item.symbol}
@@ -101,9 +105,8 @@ export function Transactions({}: TransactionsProps): JSX.Element {
                 date={item.date}
                 exchange={item.exchange}
               />
-            </>
+            </View>
           )}
-          keyExtractor={({ id }) => id}
           ListEmptyComponent={
             <>
               <Spacer y={4} />

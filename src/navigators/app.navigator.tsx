@@ -41,7 +41,7 @@ export function AppNavigator() {
         }}
         component={TransactionsNavigator}
       />
-      <App.Screen
+      {/* <App.Screen
         name="WalletNavigator"
         options={{
           title: "Carteira",
@@ -60,7 +60,7 @@ export function AppNavigator() {
           ),
         }}
         component={DashboardNavigator}
-      />
+      /> */}
     </App.Navigator>
   );
 }

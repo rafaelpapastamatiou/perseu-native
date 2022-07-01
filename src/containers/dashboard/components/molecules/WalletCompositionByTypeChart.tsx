@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Text, useWindowDimensions, View } from "react-native";
 import { PieChart } from "react-native-svg-charts";
 import { colors } from "../../../../config/colors";
@@ -43,6 +43,14 @@ export function WalletCompositionByTypeChart({ data }: WalletCompositionByTypeCh
     });
   }, [data, selectedSlice]);
 
+  useEffect(() => {
+    const firstItem = data[0]
+
+    if (!firstItem) return
+
+    setSelectedSlice(firstItem)
+  }, [data])
+
   return (
     <View style={{ justifyContent: 'center', flex: 1 }}>
       <PieChart
@@ -53,12 +61,14 @@ export function WalletCompositionByTypeChart({ data }: WalletCompositionByTypeCh
       />
 
       {selectedSlice && (
-        <Text onLayout={({ nativeEvent: { layout: { width } } }) => {
-          setLabelWidth(width)
-        }}
+        <Text
+          onLayout={({ nativeEvent: { layout: { width } } }) => {
+            setLabelWidth(width)
+          }}
+
           style={{
             position: "absolute",
-            left: deviceWidth / 2 - labelWidth * 1.35,
+            left: deviceWidth / 2 - (labelWidth * 1.25),
             textAlign: "center",
             color: selectedSlice.svg?.fill
           }}

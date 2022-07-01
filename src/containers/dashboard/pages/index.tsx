@@ -12,6 +12,8 @@ import { ProfitabilityChart } from "../components/molecules/ProfitabilityChart";
 import { useWalletCompositionByType } from "../hooks/useWalletCompositioByType";
 import { useWalletComposition } from "../hooks/useWalletComposition";
 import { WalletCompositionChart } from "../components/molecules/WalletCompositionChart";
+import { useWalletProfitability } from "../hooks/useWalletDailyProfitability";
+import { useWalletEquity } from "../hooks/useWalletDailyEquity";
 
 const colorsArray = [
   colors.goldenYellow,
@@ -22,6 +24,8 @@ const colorsArray = [
   colors.silver
 ]
 
+const priceFormatter = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" })
+
 export function Dashboard() {
   const {
     data: composition = [],
@@ -30,6 +34,18 @@ export function Dashboard() {
   const {
     data: compositionByType = [],
   } = useWalletCompositionByType()
+
+  const { data: profitability = [] } = useWalletProfitability()
+
+  const { data: equity = [] } = useWalletEquity()
+
+  const profitabilityChartData = profitability.map(
+    ({ percentage }) => percentage
+  )
+
+  const equityChartData = equity.map(
+    ({ total }) => total
+  )
 
   const compositionByTypeChartData = compositionByType.map(
     ({ type, percentage }, i) => ({
@@ -40,37 +56,39 @@ export function Dashboard() {
         fill: colorsArray[i]
       },
     })
-  )
+  ).sort((a, b) => b.value - a.value)
 
   const compositionChartData = composition.map(
     ({ symbol, percentage }, i) => ({
       label: symbol,
       value: percentage,
     })
-  )
+  ).sort((a, b) => b.value - a.value)
+
+  const lastEquity = equityChartData[equityChartData.length - 1]
+  const equityValue = lastEquity
+    ? priceFormatter.format(lastEquity)
+    : undefined
+
+  const lastProfitability = profitabilityChartData[profitabilityChartData.length - 1]
+  const profitabilityValue = lastProfitability
+    ? `${lastProfitability}%`
+    : undefined
+
   return (
     <>
       <Header title="Dashboard" />
 
       <ScrollView>
         <Content>
-          <Card title="Rentabilidade" subtitle="(no último ano)">
+          <Card
+            title="Rentabilidade"
+            subtitle={profitabilityValue}
+          >
             <ProfitabilityChart
               data={[
                 {
-                  data: [0, 1.2, -0.8, 2.1, 4.3, 5],
-                },
-                {
-                  data: [0, -0.1, -0.8, -0.2, 1.8, 3],
-                  svg: {
-                    stroke: colors.phloxPurple,
-                  },
-                },
-                {
-                  data: [0, 2, 2.4, 1.8, 3.9, 16],
-                  svg: {
-                    stroke: colors.radicalRed,
-                  },
+                  data: [0, ...profitabilityChartData],
                 },
               ]}
             />
@@ -78,8 +96,11 @@ export function Dashboard() {
 
           <Spacer y={4} />
 
-          <Card title="Patrimônio">
-            <AssetsChart data={[0, 100, -200, -400, -100, 500, 800, 1400]} />
+          <Card
+            title={`Patrimônio`}
+            subtitle={equityValue}
+          >
+            <AssetsChart data={[0, ...equityChartData]} />
           </Card>
 
           <Spacer y={4} />

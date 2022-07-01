@@ -7,8 +7,6 @@ export type Transaction = {
   unitValue: number;
   quantity: number;
   tax: number;
-  createdAt: Date;
-  updatedAt?: Date;
-  createdAtFormatted: string;
-  updatedAtFormatted?: string;
+  date: string;
 };
+

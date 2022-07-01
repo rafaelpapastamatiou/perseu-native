@@ -2,7 +2,6 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "react-native-svg";
 import { BarChart, Grid, YAxis } from "react-native-svg-charts";
-import *  as scale from 'd3-scale'
 
 import { colors } from "../../../../config/colors";
 
@@ -33,7 +32,7 @@ function Labels({
           x={value > CUT_OFF ? x(0) + 10 : x(value) + 10}
           y={y(i) + (bandwidth / 2)}
           fontSize={14}
-          fill={value > CUT_OFF ? "white" : colors.phloxPurple}
+          fill={value > CUT_OFF ? "white" : colors.radicalRed}
           alignmentBaseline='middle'
         >
           {value}%
@@ -64,7 +63,7 @@ export function WalletCompositionChart({
         data={data}
         horizontal={true}
         yAccessor={({ item }) => item.value}
-        svg={{ fill: colors.phloxPurple }}
+        svg={{ fill: colors.radicalRed }}
         contentInset={{ top: 10, bottom: 10, left: 10 }}
         gridMin={0}
         spacingInner={0.4}

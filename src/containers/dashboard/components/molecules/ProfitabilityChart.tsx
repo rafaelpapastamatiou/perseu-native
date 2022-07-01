@@ -46,6 +46,7 @@ export function ProfitabilityChart({ data }: ProfitabilityChartProps) {
         max={limit.max}
         min={limit.min}
         numberOfTicks={numberOfTicks}
+        formatLabel={(value) => `${value} %`}
       />
 
       <Flex flex={1} ml={2}>

@@ -22,13 +22,17 @@ export function TransactionItem({
   type,
   date
 }: TransactionItemProps) {
-  const formattedDate = format(new Date(date), "P", { locale: ptBR })
+  const formattedDate = format(new Date(date), "P 'às' p", { locale: ptBR })
+
+  const formattedUnitValue = priceFormatter.format(Number(unitValue))
 
   const totalPrice = priceFormatter.format(Number(quantity) * Number(unitValue))
 
   return (
     <VStack p={4} bgColor={'dark.100'} shadow={'4'} borderRadius={'8'}>
-      <Text>{transactionTypeLabels[type]} {quantity}x {symbol} ({exchange}) - {totalPrice} ({formattedDate})</Text>
+      <Text>{transactionTypeLabels[type]} de {quantity}x {symbol} ({exchange}) por {formattedUnitValue}</Text>
+      <Text>Valor total: {totalPrice}</Text>
+      <Text>Data: {formattedDate}</Text>
     </VStack>
   )
 }
