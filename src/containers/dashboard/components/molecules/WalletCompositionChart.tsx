@@ -45,7 +45,7 @@ function Labels({
 export function WalletCompositionChart({
   data
 }: WalletCompositionChartProps) {
-
+  console.log(data)
   return (
     <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
       <YAxis
@@ -54,7 +54,10 @@ export function WalletCompositionChart({
         contentInset={{ top: 20, bottom: 25 }}
 
         numberOfTicks={data.length}
-        formatLabel={(_, i) => data[i] ? `${data[i].label}` : ''}
+        formatLabel={(_, i) => {
+          const index = data.length - 1 - i
+          return data[index] ? `${data[index].label}` : ''
+        }}
         svg={{ fill: "white" }}
       />
 

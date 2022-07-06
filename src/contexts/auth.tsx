@@ -69,6 +69,7 @@ export function AuthProvider({
     }
     catch (err) {
       console.log(err)
+      console.log((err as any).response)
     }
     finally {
       setIsLoading(false)

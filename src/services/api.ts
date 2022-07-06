@@ -3,6 +3,8 @@ import axios from "axios";
 
 export const api = axios.create({
   baseURL: "http://localhost:4000",
+  // baseURL: "http://api.perseu.app:4000",
+  // baseURL: "http://18.228.120.234:4000"
 });
 
 
@@ -22,3 +24,4 @@ api.interceptors.request.use(
     return Promise.reject(err)
   }
 )
+
